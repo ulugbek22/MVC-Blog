@@ -2,7 +2,8 @@
 
 require 'system/functions.php';
 
-$data['posts'] = get('posts');
-$data['title'] = 'Home';
+$url = explode('/', $_SERVER['REQUEST_URI']);
 
-view('home', $data);
+$controller = $url[2] ? $url[2] : 'home';
+
+print_r($controller); die();
