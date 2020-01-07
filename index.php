@@ -2,6 +2,7 @@
 
 require 'system/functions.php';
 
-$post = get('posts', 2);
+$data['posts'] = get('posts');
+$data['title'] = 'Home';
 
-print_r($post);
+view('home', $data);

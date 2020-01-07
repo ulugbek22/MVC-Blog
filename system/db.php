@@ -17,13 +17,13 @@ function connect($config)
 
 $conn = connect($config);
 
-function query($conn, $sql, $bindings = false)
+function query($conn, $sql, $id = false)
 {
-	if ($bindings) {
+	if ($id) {
 
 		$result = $conn->prepare($sql);
 	
-		$result->bindParam(':id', $bindings, PDO::PARAM_INT);
+		$result->bindParam(':id', $id, PDO::PARAM_INT);
 	
 		$result->execute();
 	
