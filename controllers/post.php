@@ -1,11 +1,11 @@
 <?php
 
 // =================================================================
-//							HOME CONTROLLER
+//							POST CONTROLLER
 // =================================================================
 
-$data['posts'] = get('posts');
+$data['post'] = get('posts', $args[0]);
 
-$data['title'] = 'Home';
+$data['title'] = $data['post']['title'];
 
-view('home', $data);
+view('post', $data);

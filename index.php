@@ -6,4 +6,6 @@ $url = explode('/', $_SERVER['REQUEST_URI']);
 
 $controller = $url[2] ? $url[2] : 'home';
 
-print_r($controller); die();
+$args = array_slice($url, 3);
+
+require "controllers/{$controller}.php";
