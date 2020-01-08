@@ -17,8 +17,10 @@ function connect($config)
 
 $conn = connect($config);
 
-function query($conn, $sql, $id = false)
+function query($sql, $id = false, $bindings = false)
 {
+	global $conn;
+
 	if ($id) {
 
 		$result = $conn->prepare($sql);
@@ -29,16 +31,34 @@ function query($conn, $sql, $id = false)
 	
 		return $result->fetchAll(PDO::FETCH_ASSOC);
 	
+	} elseif ($bindings) {
+
+		$result = $conn->prepare($sql);
+
+		$result->execute($bindings);
+
+		return $conn->lastInsertId();
+
 	} else $result = $conn->query($sql);
 
 	return $result->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function get($table, $id = false, $limit = 5)
+function get($table, $id = false, $limit = 15)
 {
-	global $conn;
+	if ($id) return query("SELECT * FROM $table WHERE id = :id", $id)[0];
 
-	if ($id) return query($conn, "SELECT * FROM $table WHERE id = :id", $id)[0];
+	else return query("SELECT * FROM $table ORDER BY id DESC LIMIT $limit");
+}
 
-	else return query($conn, "SELECT * FROM $table LIMIT $limit");
+function add($data, $table)
+{
+	foreach ($data as $key => $val) {
+		@$keys .= "$key, ";
+		@$vals .= ":$key, ";
+	}
+	$keys = preg_replace('/, $/', '', $keys);
+	$vals = preg_replace('/, $/', '', $vals);
+
+	return query("INSERT INTO $table ($keys) VALUES ($vals)", false, $data);
 }
